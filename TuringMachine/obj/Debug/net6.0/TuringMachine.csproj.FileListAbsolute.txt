@@ -1,0 +1,15 @@
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\TuringMachine.csproj.AssemblyReference.cache
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\TuringMachine.GeneratedMSBuildEditorConfig.editorconfig
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\TuringMachine.AssemblyInfoInputs.cache
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\TuringMachine.AssemblyInfo.cs
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\TuringMachine.csproj.CoreCompileInputs.cache
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\bin\Debug\net6.0\TuringMachine.exe
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\bin\Debug\net6.0\TuringMachine.deps.json
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\bin\Debug\net6.0\TuringMachine.runtimeconfig.json
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\bin\Debug\net6.0\TuringMachine.dll
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\bin\Debug\net6.0\TuringMachine.pdb
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\TuringMachine.dll
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\refint\TuringMachine.dll
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\TuringMachine.pdb
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\TuringMachine.genruntimeconfig.cache
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\ref\TuringMachine.dll
