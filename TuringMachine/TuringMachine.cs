@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Turing;
 
@@ -44,9 +45,29 @@ public sealed class TuringMachine
         set => tape[pointer] = value;
     }
 
+    public MachineSettings Settings
+    {
+        get => new ()
+        {
+            Alphabet = alphabet,
+            CurrentState = currentState,
+            Rule =  _rules,
+            States = states,
+            Tape = new string(tape)
+        };
+        private set
+        {
+            alphabet = value.Alphabet;
+            currentState = value.CurrentState;
+            _rules = value.Rule;
+            states = value.States;
+            tape = value.Tape.ToCharArray();
+        }
+    }
+
     public void SetInitialState(string state)
     {
-        if (!(currentState is null))
+        if (!(currentState is null))//TODO: подумать насчёт initial state
             throw new ArgumentException("Machine already initialize current state");
         currentState = state;
     }
@@ -125,13 +146,10 @@ public sealed class TuringMachine
     }
 
     public string Serialize() =>
-        JsonConvert.SerializeObject(
-            new
-            {
-                Alphabet = alphabet,
-                Rule = _rules,
-                States = states,
-                CurrentState = currentState,
-                Tape = new string(tape)
-            });    
+        JsonConvert.SerializeObject(Settings);
+
+    public void Deserialize(string json)//TODO: должно возвращать TuringMachine?
+    {
+        Settings = JsonConvert.DeserializeObject<MachineSettings>(json);
+    }
 }

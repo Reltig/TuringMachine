@@ -2,7 +2,7 @@
 
 namespace Turing;
 
-sealed class Rules : IEnumerable<Rule>
+public sealed class Rules : IEnumerable<Rule>, ICollection<Rule>
 {
     private List<Rule> data;
 
@@ -12,6 +12,28 @@ sealed class Rules : IEnumerable<Rule>
     }
 
     public void Add(Rule rule) => data.Add(rule);
+    public void Clear()
+    {
+        data.Clear();
+    }
+
+    public bool Contains(Rule item)
+    {
+       return data.Contains(item);
+    }
+
+    public void CopyTo(Rule[] array, int arrayIndex)
+    {
+        data.CopyTo(array, arrayIndex);
+    }
+
+    public bool Remove(Rule item)
+    {
+        return data.Remove(item);
+    }
+
+    public int Count { get => data.Count; }
+    public bool IsReadOnly { get => false; }
 
     public Rule this[string state, char letter]
     {

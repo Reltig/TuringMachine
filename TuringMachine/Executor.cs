@@ -39,10 +39,18 @@ public static class Executor
         });
         allCommands.Add("saveconfig", (machine, args) =>
         {
-            string path = null;
+            string path = null;//TODO: доделать
             if (args.Length > 0)
                 path = args[0];
             File.WriteAllText("machine-settings.json", machine.Serialize());
+        });
+        allCommands.Add("loadconfig", (machine, args) =>
+        {
+            string path = null; //TODO: доделать
+            if (args.Length > 0)
+                path = args[0];
+            var json = File.ReadAllText("machine-settings.json");
+            machine.Deserialize(json);
         });
     }
 
