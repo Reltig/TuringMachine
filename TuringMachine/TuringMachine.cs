@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using System.Text.Json.Nodes;
+using Newtonsoft.Json;
 
 namespace Turing;
 
@@ -121,4 +123,15 @@ public sealed class TuringMachine
 
         return builder.ToString();
     }
+
+    public string Serialize() =>
+        JsonConvert.SerializeObject(
+            new
+            {
+                Alphabet = alphabet,
+                Rule = _rules,
+                States = states,
+                CurrentState = currentState,
+                Tape = new string(tape)
+            });    
 }

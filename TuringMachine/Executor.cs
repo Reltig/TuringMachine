@@ -7,8 +7,9 @@ public static class Executor
     static Executor()
     {
         allCommands = new();
-        allCommands.Add("step", ((machine, args) => machine.NextStep()));
-        allCommands.Add("cls", ((machine, args) => Console.Clear()));
+        allCommands.Add("exit", (machine, args) => Environment.Exit(0));
+        allCommands.Add("cls", (machine, args) => Console.Clear());
+        allCommands.Add("step", (machine, args) => machine.NextStep());
         allCommands.Add("settape", (machine, args) =>
         {
             if (args.Length != 1)
@@ -36,15 +37,13 @@ public static class Executor
                 throw new Exception("Invalid rule syntax");//TODO: заменить все исключения
             machine.UpdateRules(rule);
         });
-        allCommands.Add("exit", (machine, args) => Environment.Exit(0));
-        /*
-        case "start":
-                //TODO: start machine
-                break;
-            case "stop":
-                //TODO: stop machine
-                break;
-        */
+        allCommands.Add("saveconfig", (machine, args) =>
+        {
+            string path = null;
+            if (args.Length > 0)
+                path = args[0];
+            File.WriteAllText("machine-settings.json", machine.Serialize());
+        });
     }
 
     public static void Excecute(TuringMachine machine, string command)
