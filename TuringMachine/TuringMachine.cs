@@ -47,11 +47,11 @@ public sealed class TuringMachine
 
     public MachineSettings Settings
     {
-        get => new ()
+        get => new()
         {
             Alphabet = alphabet,
             CurrentState = currentState,
-            Rule =  _rules,
+            Rule = _rules,
             States = states,
             Tape = new string(tape)
         };
@@ -59,7 +59,7 @@ public sealed class TuringMachine
         {
             alphabet = value.Alphabet;
             currentState = value.CurrentState;
-            _rules = value.Rule;
+            _rules = value.Rule; //TODO: правила не загружаются
             states = value.States;
             tape = value.Tape.ToCharArray();
         }
@@ -67,7 +67,7 @@ public sealed class TuringMachine
 
     public void SetInitialState(string state)
     {
-        if (!(currentState is null))//TODO: подумать насчёт initial state
+        if (!(currentState is null)) //TODO: подумать насчёт initial state
             throw new ArgumentException("Machine already initialize current state");
         currentState = state;
     }
@@ -119,6 +119,10 @@ public sealed class TuringMachine
             case 'R':
                 MoveRight();
                 break;
+            case 'N':
+                break;
+            default:
+                throw new Exception("Invalid exception");
         }
     }
 
@@ -142,14 +146,19 @@ public sealed class TuringMachine
             builder.Append(tape[i % TapeMaxLenght]);
         }
 
-        return builder.ToString();
+        return builder.ToString() + "\n" + (
+            startPosition <= pointer && pointer <= endPosition
+                ? new string(' ', endPosition - startPosition).Insert(pointer - startPosition, "^")
+                : new string(' ', endPosition - startPosition + 1)
+        );
     }
 
     public string Serialize() =>
         JsonConvert.SerializeObject(Settings);
 
-    public void Deserialize(string json)//TODO: должно возвращать TuringMachine?
+    public void Deserialize(string json) //TODO: должно возвращать TuringMachine?
     {
-        Settings = JsonConvert.DeserializeObject<MachineSettings>(json);
+        var set = JsonConvert.DeserializeObject<MachineSettings>(json);
+        Settings = set; //TODO: https://stackoverflow.com/questions/24726273/why-can-i-not-deserialize-this-custom-struct-using-json-net
     }
 }

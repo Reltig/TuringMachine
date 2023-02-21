@@ -1,5 +1,6 @@
 ﻿namespace Turing;
 
+[Serializable]
 public struct Rule
 {
     public readonly string OpeningState, ClosingState;

@@ -2,7 +2,7 @@
 
 namespace Turing;
 
-public sealed class Rules : IEnumerable<Rule>, ICollection<Rule>
+public sealed class Rules : ICollection<Rule>
 {
     private List<Rule> data;
 
@@ -12,36 +12,27 @@ public sealed class Rules : IEnumerable<Rule>, ICollection<Rule>
     }
 
     public void Add(Rule rule) => data.Add(rule);
-    public void Clear()
+    public void Clear() => data.Clear();
+    public bool Contains(Rule item) => data.Contains(item);
+    public void CopyTo(Rule[] array, int arrayIndex) => data.CopyTo(array, arrayIndex);
+    public bool Remove(Rule item) => data.Remove(item);
+
+    public int Count
     {
-        data.Clear();
+        get => data.Count;
     }
 
-    public bool Contains(Rule item)
+    public bool IsReadOnly
     {
-       return data.Contains(item);
+        get => false;
     }
-
-    public void CopyTo(Rule[] array, int arrayIndex)
-    {
-        data.CopyTo(array, arrayIndex);
-    }
-
-    public bool Remove(Rule item)
-    {
-        return data.Remove(item);
-    }
-
-    public int Count { get => data.Count; }
-    public bool IsReadOnly { get => false; }
 
     public Rule this[string state, char letter]
     {
         get
         {
-            var result =
-                data.FirstOrDefault(rule =>
-                    rule.OpeningState == state && rule.OpeningLetter == letter); //TODO: or default
+            var result = data
+                .FirstOrDefault(rule => rule.OpeningState == state && rule.OpeningLetter == letter); //TODO: or default
             if (result.OpeningState is null) //TODO: сделать нормальное определение default значение
                 return new Rule(state, state, letter, letter, 'N');
             return result;

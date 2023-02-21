@@ -10,7 +10,7 @@ public sealed class Parser
         var expressionRegex = new Regex(@"\s*\w+\d*\s\w\s*->\s*\w+\d*\s\w\s[LRN]\s*");
         if (!expressionRegex.IsMatch(expression))
         {
-            Console.WriteLine("Invalid expression"); //TODO:enum синтаксических ошибок
+            Console.WriteLine("Invalid expression");
             return false;
         }
 
