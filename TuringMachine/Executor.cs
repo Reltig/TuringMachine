@@ -42,7 +42,8 @@ public static class Executor
             string path = null;//TODO: доделать
             if (args.Length > 0)
                 path = args[0];
-            File.WriteAllText("machine-settings.json", machine.Serialize());
+            var jsonString = machine.Serialize();
+            File.WriteAllText("machine-settings.json", jsonString);
         });
         allCommands.Add("loadconfig", (machine, args) =>
         {

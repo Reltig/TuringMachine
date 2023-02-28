@@ -3,9 +3,13 @@
 [Serializable]
 public struct Rule
 {
-    public readonly string OpeningState, ClosingState;
-    public readonly char OpeningLetter, ClosingLetter;
-    public readonly char Action;
+    public string OpeningState { get; set; }
+    public string ClosingState{ get; set; }
+    
+    public char OpeningLetter{ get; set; }
+    public char ClosingLetter{ get; set; }
+    
+    public char Action{ get; set; }
 
     public Rule(string opState, string clState, char opLetter, char clLetter, char action)
     {

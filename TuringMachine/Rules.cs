@@ -4,12 +4,16 @@ namespace Turing;
 
 public sealed class Rules : ICollection<Rule>
 {
-    private List<Rule> data;
+    public List<Rule> data { get; set; }
+
+    //public IEnumerable<Rule> Data => data;
 
     public Rules()
     {
         data = new();
     }
+
+    public Rules(IEnumerable<Rule> rules) => data = rules.ToList();
 
     public void Add(Rule rule) => data.Add(rule);
     public void Clear() => data.Clear();

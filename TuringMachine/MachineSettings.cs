@@ -2,9 +2,9 @@
 
 public class MachineSettings
 {
-    public HashSet<char> Alphabet;
-    public HashSet<string> States;
-    public string CurrentState;
-    public Rules Rule;
-    public string Tape;
+    public HashSet<char> Alphabet { get; set; }
+    public HashSet<string> States { get; set; }
+    public string CurrentState { get; set; }
+    public Rules Rule { get; set; }
+    public string Tape { get; set; }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Turing;
@@ -47,7 +47,7 @@ public sealed class TuringMachine
 
     public MachineSettings Settings
     {
-        get => new()
+        get => new MachineSettings() 
         {
             Alphabet = alphabet,
             CurrentState = currentState,
@@ -154,11 +154,11 @@ public sealed class TuringMachine
     }
 
     public string Serialize() =>
-        JsonConvert.SerializeObject(Settings);
+        JsonSerializer.Serialize(Settings);
 
     public void Deserialize(string json) //TODO: должно возвращать TuringMachine?
     {
-        var set = JsonConvert.DeserializeObject<MachineSettings>(json);
-        Settings = set; //TODO: https://stackoverflow.com/questions/24726273/why-can-i-not-deserialize-this-custom-struct-using-json-net
+        var set = JsonSerializer.Deserialize<MachineSettings>(json);
+        Settings = set ?? throw new Exception("Settings error"); //TODO: https://stackoverflow.com/questions/24726273/why-can-i-not-deserialize-this-custom-struct-using-json-net
     }
 }

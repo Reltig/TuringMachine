@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 
 namespace Turing
 {
@@ -8,6 +9,12 @@ namespace Turing
     {
         static void Main(string[] args)
         {
+            /*JsonConvert.DefaultSettings = () =>
+            {
+                var settings = new JsonSerializerSettings();
+                settings.Converters.Add(new CustomConverter());
+                return settings;
+            };*/
             var machine = new TuringMachine();
             while (true)
             {
