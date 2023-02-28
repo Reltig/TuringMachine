@@ -1,7 +1,5 @@
 ﻿using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using Newtonsoft.Json.Linq;
 
 namespace Turing;
 
@@ -9,31 +7,27 @@ public sealed class TuringMachine
 {
     private const int TapeMaxLenght = 65536;
 
-    private HashSet<char> alphabet;
-    private HashSet<string> states;
-    private string currentState;
+    private HashSet<char> _alphabet;
+    private HashSet<string> _states;
     private Rules _rules;
-    private int pointer;
-    private char[] tape;
+    
+    private string _currentState;
+    private int _pointer;
+    private char[] _tape;
 
-    public TuringMachine(string initialState = null)
+    public TuringMachine()
     {
-        pointer = 0;
-        currentState = initialState;
-        tape = new char[TapeMaxLenght];
+        _currentState = null;
+        _pointer = 0;
+        _tape = new char[TapeMaxLenght];
         _rules = new();
-        states = new();
-        alphabet = new();
-    }
-
-    public TuringMachine(IEnumerable<Rule> rules, string initialState = null) : this(initialState)
-    {
-        _rules.AddRange(rules);
+        _states = new();
+        _alphabet = new();
     }
 
     private void Move(int offset)
     {
-        pointer = (pointer + offset) % TapeMaxLenght;
+        _pointer = (_pointer + offset) % TapeMaxLenght;
     }
 
     private void MoveLeft() => Move(-1);
@@ -41,43 +35,41 @@ public sealed class TuringMachine
 
     private char CurrentCell
     {
-        get => tape[pointer];
-        set => tape[pointer] = value;
+        get => _tape[_pointer];
+        set => _tape[_pointer] = value;
     }
 
     public MachineSettings Settings
     {
         get => new MachineSettings() 
         {
-            Alphabet = alphabet,
-            CurrentState = currentState,
+            Alphabet = _alphabet,
+            CurrentState = _currentState,
             Rule = _rules,
-            States = states,
-            Tape = new string(tape)
+            States = _states,
+            Tape = new string(_tape),
+            Position = _pointer
         };
         private set
         {
-            alphabet = value.Alphabet;
-            currentState = value.CurrentState;
-            _rules = value.Rule; //TODO: правила не загружаются
-            states = value.States;
-            tape = value.Tape.ToCharArray();
+            _alphabet = value.Alphabet;
+            _currentState = value.CurrentState;
+            _rules = value.Rule; 
+            _states = value.States;
+            _tape = value.Tape.ToCharArray();
+            _pointer = value.Position;
         }
     }
 
     public void SetInitialState(string state)
     {
-        if (!(currentState is null)) //TODO: подумать насчёт initial state
-            throw new ArgumentException("Machine already initialize current state");
-        currentState = state;
+        _currentState ??= state;
     }
 
     public void InsertTape(string tapeClip)
     {
         for (int i = 0; i < tapeClip.Length; i++)
-        {
-            tape[(pointer + i) % TapeMaxLenght] = tapeClip[i];
-        }
+            _tape[(_pointer + i) % TapeMaxLenght] = tapeClip[i];
     }
 
     public void UpdateRules(Rule rule)
@@ -90,26 +82,25 @@ public sealed class TuringMachine
     public void UpdateRules(IEnumerable<Rule> rules)
     {
         foreach (var rule in rules)
-        {
             UpdateRules(rule);
-        }
     }
 
     private void Update(Rule rule)
     {
-        states.Add(rule.OpeningState);
-        states.Add(rule.ClosingState);
+        _currentState ??= rule.OpeningState;
+        _states.Add(rule.OpeningState);
+        _states.Add(rule.ClosingState);
 
-        alphabet.Add(rule.OpeningLetter);
-        alphabet.Add(rule.ClosingLetter);
+        _alphabet.Add(rule.OpeningLetter);
+        _alphabet.Add(rule.ClosingLetter);
     }
 
     public void NextStep()
     {
-        if (currentState is null)
+        if (_currentState is null)
             throw new Exception("Current state is undefined");
-        var rule = _rules[currentState, CurrentCell];
-        currentState = rule.ClosingState;
+        var rule = _rules[_currentState, CurrentCell];
+        _currentState = rule.ClosingState;
         CurrentCell = rule.ClosingLetter;
         switch (rule.Action)
         {
@@ -129,12 +120,10 @@ public sealed class TuringMachine
     public void DoSteps(int count)
     {
         for (int i = 0; i < count; i++)
-        {
             NextStep();
-        }
     }
 
-    public string TapeClipping(int lenght) => TapeClipping(pointer, pointer + lenght);
+    public string TapeClipping(int lenght) => TapeClipping(_pointer, _pointer + lenght);
 
     public string TapeClipping(int startPosition, int endPosition)
     {
@@ -143,12 +132,12 @@ public sealed class TuringMachine
         var builder = new StringBuilder();
         for (int i = startPosition; i < endPosition; i++)
         {
-            builder.Append(tape[i % TapeMaxLenght]);
+            builder.Append(_tape[i % TapeMaxLenght]);
         }
 
         return builder.ToString() + "\n" + (
-            startPosition <= pointer && pointer <= endPosition
-                ? new string(' ', endPosition - startPosition).Insert(pointer - startPosition, "^")
+            startPosition <= _pointer && _pointer <= endPosition
+                ? new string(' ', endPosition - startPosition).Insert(_pointer - startPosition, "^")
                 : new string(' ', endPosition - startPosition + 1)
         );
     }
@@ -158,7 +147,6 @@ public sealed class TuringMachine
 
     public void Deserialize(string json) //TODO: должно возвращать TuringMachine?
     {
-        var set = JsonSerializer.Deserialize<MachineSettings>(json);
-        Settings = set ?? throw new Exception("Settings error"); //TODO: https://stackoverflow.com/questions/24726273/why-can-i-not-deserialize-this-custom-struct-using-json-net
+        Settings = JsonSerializer.Deserialize<MachineSettings>(json) ?? throw new Exception("Settings error"); 
     }
 }

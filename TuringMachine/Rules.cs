@@ -36,7 +36,7 @@ public sealed class Rules : ICollection<Rule>
         get
         {
             var result = data
-                .FirstOrDefault(rule => rule.OpeningState == state && rule.OpeningLetter == letter); //TODO: or default
+                .FirstOrDefault(rule => rule.OpeningState == state && rule.OpeningLetter == letter);
             if (result.OpeningState is null) //TODO: сделать нормальное определение default значение
                 return new Rule(state, state, letter, letter, 'N');
             return result;
