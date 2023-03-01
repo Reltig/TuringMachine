@@ -12,17 +12,18 @@ public static class Executor
         allCommands.Add("cls", (machine, args) => Console.Clear());
         allCommands.Add("step", (machine, args) =>
         {
-            if(args.Length == 0)
+            if (args.Length == 0)
             {
                 machine.NextStep();
                 return;
             }
+
             if (args.Length > 1)
                 throw new ArgumentException("Wrong arguments count");
             int stepCount;
             if (!int.TryParse(args[0], out stepCount))
                 throw new ArgumentException("Not integer steps count");
-            if(stepCount < 0)
+            if (stepCount < 0)
                 throw new ArgumentException("Steps count must be non-negative");
             machine.DoSteps(stepCount);
         });
@@ -50,7 +51,7 @@ public static class Executor
             var ruleExpression = String.Join(' ', args);
             Rule rule;
             if (!_parser.TryParse(ruleExpression, out rule))
-                throw new Exception("Invalid rule syntax");//TODO: заменить все исключения
+                throw new Exception("Invalid rule syntax"); //TODO: заменить все исключения
             machine.UpdateRules(rule);
         });
         allCommands.Add("saveconfig", (machine, args) =>
@@ -68,6 +69,22 @@ public static class Executor
                 path = args[0];
             var jsonString = File.ReadAllText($"{path}.json");
             machine.Deserialize(jsonString);
+        });
+        allCommands.Add("loadtape", (machine, args) =>
+        {
+            string path = "tape-result.txt";
+            if (args.Length > 0)
+                path = args[0];
+            var tape = File.ReadAllText($"{path}");
+            machine.InsertTape(tape);
+        });
+        allCommands.Add("savetape", (machine, args) =>
+        {
+            string path = "tape.txt";
+            if (args.Length > 0)
+                path = args[0];
+            File.WriteAllText($"{path}",
+                machine.Tape); //TODO: переделать, сделать получение ленты в виде "ababab...(59)...ab"
         });
     }
 

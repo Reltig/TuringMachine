@@ -10,7 +10,7 @@ public sealed class TuringMachine
     private HashSet<char> _alphabet;
     private HashSet<string> _states;
     private Rules _rules;
-    
+
     private string _currentState;
     private int _pointer;
     private char[] _tape;
@@ -33,6 +33,11 @@ public sealed class TuringMachine
     private void MoveLeft() => Move(-1);
     private void MoveRight() => Move(1);
 
+    public string Tape
+    {
+        get => new string(_tape).Replace('\u0000', (char)0); //TODO: доделать
+    }
+
     private char CurrentCell
     {
         get => _tape[_pointer];
@@ -41,7 +46,7 @@ public sealed class TuringMachine
 
     public MachineSettings Settings
     {
-        get => new MachineSettings() 
+        get => new MachineSettings()
         {
             Alphabet = _alphabet,
             CurrentState = _currentState,
@@ -54,7 +59,7 @@ public sealed class TuringMachine
         {
             _alphabet = value.Alphabet;
             _currentState = value.CurrentState;
-            _rules = value.Rule; 
+            _rules = value.Rule;
             _states = value.States;
             _tape = value.Tape.ToCharArray();
             _pointer = value.Position;
@@ -147,6 +152,6 @@ public sealed class TuringMachine
 
     public void Deserialize(string json) //TODO: должно возвращать TuringMachine?
     {
-        Settings = JsonSerializer.Deserialize<MachineSettings>(json) ?? throw new Exception("Settings error"); 
+        Settings = JsonSerializer.Deserialize<MachineSettings>(json) ?? throw new Exception("Settings error");
     }
 }
