@@ -86,6 +86,7 @@ public static class Executor
             File.WriteAllText($"{path}",
                 machine.Tape); //TODO: переделать, сделать получение ленты в виде "ababab...(59)...ab"
         });
+        allCommands.Add("printrules", (machine, args) => { machine.PrintRules(); });
     }
 
     public static void Excecute(TuringMachine machine, string command)

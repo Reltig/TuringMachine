@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using ConsoleTables;
 
 namespace Turing;
 
@@ -7,8 +8,6 @@ public sealed class TuringMachine
 {
     private const int TapeMaxLenght = 65536;
 
-    private HashSet<char> _alphabet;
-    private HashSet<string> _states;
     private Rules _rules;
 
     private string _currentState;
@@ -21,8 +20,6 @@ public sealed class TuringMachine
         _pointer = 0;
         _tape = new char[TapeMaxLenght];
         _rules = new();
-        _states = new();
-        _alphabet = new();
     }
 
     private void Move(int offset)
@@ -48,19 +45,15 @@ public sealed class TuringMachine
     {
         get => new MachineSettings()
         {
-            Alphabet = _alphabet,
             CurrentState = _currentState,
             Rule = _rules,
-            States = _states,
             Tape = new string(_tape),
             Position = _pointer
         };
         private set
         {
-            _alphabet = value.Alphabet;
             _currentState = value.CurrentState;
             _rules = value.Rule;
-            _states = value.States;
             _tape = value.Tape.ToCharArray();
             _pointer = value.Position;
         }
@@ -93,11 +86,7 @@ public sealed class TuringMachine
     private void Update(Rule rule)
     {
         _currentState ??= rule.OpeningState;
-        _states.Add(rule.OpeningState);
-        _states.Add(rule.ClosingState);
-
-        _alphabet.Add(rule.OpeningLetter);
-        _alphabet.Add(rule.ClosingLetter);
+        //TODO: переписать или убрать(инициализировать в момент первого шага)
     }
 
     public void NextStep()
@@ -153,5 +142,29 @@ public sealed class TuringMachine
     public void Deserialize(string json) //TODO: должно возвращать TuringMachine?
     {
         Settings = JsonSerializer.Deserialize<MachineSettings>(json) ?? throw new Exception("Settings error");
+    }
+
+    public void PrintRules()
+    {
+        var alphbet = _rules.Alphabet;
+        var states = _rules.States;
+
+        var columns = new List<string>() { "State\\Symbol" };
+        columns.AddRange(alphbet.Select(c => c.ToString()));
+        var table = new ConsoleTable(columns.ToArray());
+        foreach (var state in states)
+        {
+            var row = new List<string>() { state };
+            row.AddRange(alphbet.Select(alp =>
+            {
+                var rule = _rules[state, alp];
+                if (rule is null)
+                    return " ";
+                return $"{rule.ClosingState} {rule.ClosingLetter} {rule.Action}";
+            }));
+            table.AddRow(row.ToArray());
+        }
+
+        table.Write();
     }
 }

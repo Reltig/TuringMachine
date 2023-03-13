@@ -6,7 +6,7 @@ public sealed class Parser
 {
     public bool TryParse(string expression, out Rule rule)
     {
-        rule = new Rule();
+        rule = null;
         var expressionRegex = new Regex(@"((\w+\d*\s.{1})|(\w+\d*))\s*->\s*((\w+\d*\s.{1})|(\w+\d*))\s[LRN]");
         if (!expressionRegex.IsMatch(expression))
         {

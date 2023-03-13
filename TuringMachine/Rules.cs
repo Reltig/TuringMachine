@@ -31,14 +31,28 @@ public sealed class Rules : ICollection<Rule>
         get => false;
     }
 
-    public Rule this[string state, char letter]
+    public char[] Alphabet
+    {
+        get => data
+            .SelectMany(r => new[] { r.OpeningLetter, r.ClosingLetter })
+            .Distinct()
+            .ToArray();
+    }
+
+    public string[] States
+    {
+        get => data
+            .SelectMany(r => new[] { r.OpeningState, r.ClosingState })
+            .Distinct()
+            .ToArray();
+    }
+
+    public Rule? this[string state, char letter]
     {
         get
         {
             var result = data
                 .FirstOrDefault(rule => rule.OpeningState == state && rule.OpeningLetter == letter);
-            if (result.OpeningState is null) //TODO: сделать нормальное определение default значение
-                return new Rule(state, state, letter, letter, 'N');
             return result;
         }
     }

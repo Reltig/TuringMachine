@@ -15,3 +15,4 @@ D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0
 D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\ref\TuringMachine.dll
 D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\bin\Debug\net6.0\Newtonsoft.Json.dll
 D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\obj\Debug\net6.0\TuringMachine.csproj.CopyComplete
+D:\c# projects\Kontur\clean-code\cs\TuringMachine\TuringMachine\bin\Debug\net6.0\ConsoleTables.dll
